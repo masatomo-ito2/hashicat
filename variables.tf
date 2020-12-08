@@ -6,13 +6,13 @@
 # prompted to enter it (or define it via config file or command line flags.)
 
 variable "Environment" {
-  type = string
-	default = "workshop"
+  type    = string
+  default = "workshop"
 }
 
 variable "Owner" {
-	type = string
-	default = "masa"
+  type    = string
+  default = "masa"
 }
 
 variable "prefix" {
@@ -52,6 +52,7 @@ variable "width" {
 }
 
 variable "placeholder" {
-  default     = "placekitten.com"
+  #default     = "placekitten.com"
+  default     = "placeskull.com"
   description = "Image-as-a-service URL. Some other fun ones to try are fillmurray.com, placecage.com, placebeard.it, loremflickr.com, baconmockup.com, placeimg.com, placebear.com, placeskull.com, stevensegallery.com, placedog.net"
 }

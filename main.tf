@@ -1,20 +1,19 @@
 provider "aws" {
-  version = "~> 2.0"
-  region  = var.region
+  region = var.region
 }
 
-resource aws_vpc "hashicat" {
+resource "aws_vpc" "hashicat" {
   cidr_block           = var.address_space
   enable_dns_hostnames = true
 }
 
 
-resource aws_subnet "hashicat" {
+resource "aws_subnet" "hashicat" {
   vpc_id     = aws_vpc.hashicat.id
   cidr_block = var.subnet_prefix
 }
 
-resource aws_security_group "hashicat" {
+resource "aws_security_group" "hashicat" {
   name = "${var.prefix}-security-group"
 
   vpc_id = aws_vpc.hashicat.id
@@ -23,21 +22,21 @@ resource aws_security_group "hashicat" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["121.6.14.14/32", "0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0", "0.0.0.0/0"]
   }
 
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["121.6.14.14/32"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["121.6.14.14/32"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -49,16 +48,11 @@ resource aws_security_group "hashicat" {
   }
 }
 
-resource random_id "app-server-id" {
-  prefix      = "${var.prefix}-hashicat-"
-  byte_length = 8
-}
-
-resource aws_internet_gateway "hashicat" {
+resource "aws_internet_gateway" "hashicat" {
   vpc_id = aws_vpc.hashicat.id
 }
 
-resource aws_route_table "hashicat" {
+resource "aws_route_table" "hashicat" {
   vpc_id = aws_vpc.hashicat.id
 
   route {
@@ -67,16 +61,16 @@ resource aws_route_table "hashicat" {
   }
 }
 
-resource aws_route_table_association "hashicat" {
+resource "aws_route_table_association" "hashicat" {
   subnet_id      = aws_subnet.hashicat.id
   route_table_id = aws_route_table.hashicat.id
 }
 
-data aws_ami "ubuntu" {
+data "aws_ami" "ubuntu" {
   most_recent = true
 
   filter {
-    name = "name"
+    name   = "name"
     values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
   }
 
@@ -98,38 +92,38 @@ resource "aws_eip_association" "hashicat" {
   allocation_id = aws_eip.hashicat.id
 }
 
-resource aws_instance "hashicat" {
-  ami = data.aws_ami.ubuntu.id
+resource "aws_instance" "hashicat" {
+  ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   key_name                    = aws_key_pair.hashicat.key_name
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.hashicat.id
   vpc_security_group_ids      = [aws_security_group.hashicat.id]
-	user_data = data.template_file.hashicat.rendered
+  user_data                   = data.template_file.hashicat.rendered
 
   tags = {
-    Name          = "${var.prefix}-hashicat-instance",
-    Environment   = var.Environment,
-		Owner = var.Owner
+    Name        = "${var.prefix}-hashicat-instance",
+    Environment = var.Environment,
+    Owner       = var.Owner
   }
 }
 
-resource tls_private_key "hashicat" {
+resource "tls_private_key" "hashicat" {
   algorithm = "RSA"
 }
 
-resource aws_key_pair "hashicat" {
+resource "aws_key_pair" "hashicat" {
   key_name   = "${var.prefix}-ssh-key"
   public_key = tls_private_key.hashicat.public_key_openssh
 }
 
-data template_file "hashicat"  {
-	template = file("${path.module}/deploy.tpl")
+data "template_file" "hashicat" {
+  template = file("${path.module}/deploy.tpl")
 
-	vars = {
-		PLACEHOLDER = var.placeholder
-		WIDTH = var.width
-		HEIGHT = var.height
-		PREFIX = var.prefix
-	}
+  vars = {
+    PLACEHOLDER = var.placeholder
+    WIDTH       = var.width
+    HEIGHT      = var.height
+    PREFIX      = var.prefix
+  }
 }
