@@ -104,7 +104,7 @@ resource "aws_instance" "hashicat" {
   tags = {
     Name        = "${var.prefix}-hashicat-instance",
     Environment = var.Environment,
-		#Owner       = var.Owner
+		Owner       = var.Owner
   }
 }
 
