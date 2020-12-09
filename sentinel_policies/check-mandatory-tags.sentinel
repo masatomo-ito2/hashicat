@@ -1,0 +1,31 @@
+# This Policy checks that all mandetory Tags are in the Terraform Configuration,
+# These Tags are ["Environment", "Project", "Team", "CostCenter", "Workspace"]
+
+# This policy uses the Sentinel tfplan/v2 import to require that
+# all AWS resources that use standard AWS tags have all mandatory tags
+
+# Import common-functions/tfplan-functions/tfplan-functions.sentinel with alias "plan"
+import "tfplan-functions" as plan
+
+# Import aws-functions/aws-functions.sentinel with alias "aws"
+import "aws-functions" as aws
+
+# List of mandatory tags
+mandatory_tags_all_resources = [ "Environment", "Owner" ]
+
+# Get all AWS Resources with standard tags
+allAWSResourcesWithStandardTags = aws.find_resources_with_standard_tags()
+# allAWSEC2Resources = plan.find_resources("aws_instance")
+
+# Filter to AWS resources with violations
+# Warnings will be printed for all violations since the last parameter is true
+violatingAWSResources = plan.filter_attribute_not_contains_list(allAWSResourcesWithStandardTags,
+                        "tags", mandatory_tags_all_resources, true)
+
+# violatingAWSEC2Resources = plan.filter_attribute_not_contains_list(allAWSEC2Resources,
+# "tags", mandatory_tags_ec2_resources, true)
+
+# Main rule
+main = rule {
+  length(violatingAWSResources["messages"]) is 0
+}

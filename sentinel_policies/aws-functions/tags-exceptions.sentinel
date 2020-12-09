@@ -1,0 +1,6 @@
+
+
+services_no_tags = ["aws_autoscaling_group", "aws_budgets_budget", 
+  "aws_cloudwatch_event_target","aws_eip_association", "aws_cloudwatch_event_rule", 
+  "aws_lambda_permission", "aws_iam_role_policy", "aws_key_pair", "aws_route_table", "aws_route_table_association",
+  "aws_cloudwatch_log_group", "aws_eip","aws_lambda_function", "aws_iam_role"]

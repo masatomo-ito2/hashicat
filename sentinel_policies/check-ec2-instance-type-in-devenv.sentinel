@@ -1,0 +1,40 @@
+# This policy checks for allowed EC2 instances in Dev Environment,
+# Allowed instances are T2, T3 and M5 families of EC2, up to xlarge size.
+
+# This policy uses the Sentinel tfplan/v2 import to require that
+# all EC2 instances have instance types from an allowed list
+
+# Import common-functions/tfplan-functions/tfplan-functions.sentinel
+# with alias "plan"
+import "tfplan-functions" as plan
+import "tfplan/v2" as tfplan
+
+
+# Allowed EC2 Instance Types
+# Include "null" to allow missing or computed values
+#allowed_types = ["t2.small", "t2.medium", "t2.large"]
+
+# Get all EC2 instances
+allEC2Instances = plan.find_resources("aws_instance")
+
+# Filter to EC2 instances with violations using regular expressions. Any instance not in the t2,t3 or m5 family will be in violation.
+# Also the allowed instance families cannot have anything above xlarge instance size, example t3.4xlarge is a violation.
+# Warnings will be printed for all violations since the last parameter is true
+
+checkIfDev = tfplan.variables.Environment.value
+
+is_environment=plan.to_string(checkIfDev)
+
+violatingEC2Instances = plan.filter_attribute_does_not_match_regex(allEC2Instances, "instance_type", "^[tm][235].[^\\d].*", true)
+
+# violatingEC2Instances = plan.filter_attribute_not_in_list(allEC2Instances,
+#                         "instance_type", allowed_types, true)
+
+# Count violations
+ec2_instance_size_violations = length(violatingEC2Instances["messages"])
+
+# Main rule
+
+main = rule {
+  ec2_instance_size_violations is 0 and is_environment is "dev"
+}
