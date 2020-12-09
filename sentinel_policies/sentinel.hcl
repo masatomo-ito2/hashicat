@@ -34,6 +34,7 @@ policy "check-ec2-instance-type-in-devenv" {
 
 policy "check-cost-by-workspace-name" {
   source  = "./check-cost-by-workspace-name.sentinel"
-  enforcement_level = "soft-mandatory"
+  #	enforcement_level = "soft-mandatory"
+  enforcement_level = "hard-mandatory"
 }
 
