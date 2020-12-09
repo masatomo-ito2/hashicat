@@ -7,7 +7,7 @@
 
 variable "Environment" {
   type    = string
-  default = "workshop"
+  default = "dev"
 }
 
 variable "Owner" {
