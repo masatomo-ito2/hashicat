@@ -1,5 +1,5 @@
 # This Policy checks that all mandetory Tags are in the Terraform Configuration,
-# These Tags are ["Environment", "Project", "Team", "CostCenter", "Workspace"]
+# These Tags are ["Environment", "Owner"]
 
 # This policy uses the Sentinel tfplan/v2 import to require that
 # all AWS resources that use standard AWS tags have all mandatory tags
