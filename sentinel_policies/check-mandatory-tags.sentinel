@@ -22,5 +22,5 @@ allAWSEC2Resources = plan.find_resources("aws_instance")
 
 # Main rule
 main = rule {
-  length(violatingAWSResources["messages"]) is 0
+  length(violatingAWSEC2Resources["messages"]) is 0
 }
