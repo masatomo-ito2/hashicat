@@ -113,7 +113,7 @@ resource "tls_private_key" "hashicat" {
 }
 
 resource "aws_key_pair" "hashicat" {
-  key_name   = "${var.prefix}-ssh-key"
+  key_name   = "${var.prefix}-ssh-key2"
   public_key = tls_private_key.hashicat.public_key_openssh
 }
 
