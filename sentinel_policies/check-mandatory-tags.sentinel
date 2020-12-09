@@ -11,7 +11,7 @@ import "tfplan-functions" as plan
 import "aws-functions" as aws
 
 # List of mandatory tags
-mandatory_tags_all_resources = [ "Environment", "Owner" ]
+mandatory_tags_ec2_resources = [ "Environment", "Owner" ]
 
 # Get all AWS Resources with standard tags
 allAWSEC2Resources = plan.find_resources("aws_instance")
