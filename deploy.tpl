@@ -25,7 +25,7 @@ cat << EOM > /var/www/html/index.html
   <!-- BEGIN -->
   <center><img src="http://${PLACEHOLDER}/${WIDTH}/${HEIGHT}"></img></center>
   <center><h2>Meow World!</h2></center>
-  Welcome to ${PREFIX}'s app. WELCOME TO THE WORKSHOP!
+  ようこそ！ ${PREFIX}の猫の世界へ！ 
   <!-- END -->
 
   </div>

@@ -43,12 +43,12 @@ variable "instance_type" {
 
 # HashiCat application settings
 variable "height" {
-  default     = "400"
+  default     = "800"
   description = "Image height in pixels."
 }
 
 variable "width" {
-  default     = "600"
+  default     = "1200"
   description = "Image width in pixels."
 }
 
