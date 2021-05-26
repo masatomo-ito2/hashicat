@@ -25,7 +25,12 @@ variable "Team" {
   default = "dev"
 }
 
-variable "ApplicatioID" {
+variable "ApplicationID" {
+  type    = string
+  default = "1"
+}
+
+variable "Limit" {
   type    = string
   default = "1"
 }
@@ -40,6 +45,26 @@ variable "TFC_WORKSPACE_NAME" {
   default = "ws"
 }
 
+variable "Notification" {
+  type = string
+}
+
+variable "filter" {
+  type    = string
+  default = "Workspace"
+}
+
+variable "tostop" {
+  type    = string
+  default = "true"
+}
+
+
+variable "time_period_start" {
+  type    = string
+  default = "2020-10-01_00:00"
+}
+
 variable "prefix" {
   description = "This prefix will be included in the name of most resources."
   default     = "masa"
@@ -47,8 +72,8 @@ variable "prefix" {
 
 variable "region" {
   description = "The region where the resources are created."
-	#default     = "ap-northeast-1"
-	default     = "us-east-1"
+  #default     = "ap-northeast-1"
+  default = "us-east-1"
 }
 
 variable "address_space" {
@@ -78,7 +103,7 @@ variable "width" {
 }
 
 variable "placeholder" {
-  default     = "placekitten.com"
+  default = "placekitten.com"
   #default     = "placeskull.com"
   #default     = "placedog.net"
   description = "Image-as-a-service URL. Some other fun ones to try are fillmurray.com, placecage.com, placebeard.it, loremflickr.com, baconmockup.com, placeimg.com, placebear.com, placeskull.com, stevensegallery.com, placedog.net"
