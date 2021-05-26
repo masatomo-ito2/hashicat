@@ -15,6 +15,31 @@ variable "Owner" {
   default = "masa"
 }
 
+variable "Project" {
+  type    = string
+  default = "project"
+}
+
+variable "Team" {
+  type    = string
+  default = "dev"
+}
+
+variable "ApplicatioID" {
+  type    = string
+  default = "1"
+}
+
+variable "CostCenter" {
+  type    = string
+  default = "dev"
+}
+
+variable "TFC_WORKSPACE_NAME" {
+  type    = string
+  default = "ws"
+}
+
 variable "prefix" {
   description = "This prefix will be included in the name of most resources."
   default     = "masa"
