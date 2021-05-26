@@ -102,9 +102,14 @@ resource "aws_instance" "hashicat" {
   user_data                   = data.template_file.hashicat.rendered
 
   tags = {
-    Name        = "${var.prefix}-hashicat-instance",
-    Environment = var.Environment,
-		Owner       = var.Owner
+    Name          = "${var.prefix}-hashicat-instance",
+    Environment   = var.Environment,
+    Project       = var.Project,
+    Team          = var.Team,
+    ApplicationID = var.ApplicationID,
+    CostCenter    = var.CostCenter,
+    Workspace     = var.TFC_WORKSPACE_NAME
+    Owner	  = var.Owner
   }
 }
 
@@ -126,4 +131,30 @@ data "template_file" "hashicat" {
     HEIGHT      = var.height
     PREFIX      = var.prefix
   }
+}
+
+module "workspace_budget" {
+  source  = "app.terraform.io/masa_org/workspace-budget/aws"
+
+  workspace_name    = var.TFC_WORKSPACE_NAME
+  limit             = var.Limit
+  time_period_start = var.time_period_start
+  subscriber_email = var.Notification
+}
+
+module "stop_ec2_instance" {
+  source                         = "app.terraform.io/masa_org/lambda-scheduler-stop-start/aws"
+    version = "2.10.0"
+
+  name                           = "ec2_stop"
+  cloudwatch_schedule_expression = "cron(0 0 ? * FRI *)"
+  schedule_action                = "stop"
+  ec2_schedule                   = "true"
+  rds_schedule                   = "false"
+  autoscaling_schedule           = "false"
+  resources_tag                  = {
+    key   = "Environment"
+    value = "dev"
+  }
+  tags = local.common_tags
 }
