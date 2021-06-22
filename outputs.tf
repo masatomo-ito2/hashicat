@@ -5,5 +5,5 @@ output "catapp_url" {
 
 output "key_pem" {
   value = tls_private_key.hashicat.private_key_pem
-  sensitive = false
+  sensitive = true
 }
